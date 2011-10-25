@@ -11,7 +11,6 @@ webdb.onError = function(tx, err) {
 };
 
 webdb.onSuccess = function(tx, rs) {
-  console.log('SUCCESS ' + rs);
   webdb.getAllTodoItems(webdb.loadTodoItems);
 };
 
@@ -42,12 +41,12 @@ webdb.loadTodoItems = function(tx, rs) {
     rowOutput += webdb.renderTodo(rs.rows.item(i));
   }
   var todoItems = document.getElementById('todoItems');
-  todoItems.innerHtml = rowOutput;
+  todoItems.innerHTML = rowOutput;
 };
 
 webdb.renderTodo = function(row) {
-  return '<li>' + row.ID +
-         '[<a onclick="webdb.deleteTodo(' + row.ID + ');">X</a>]</li>';
+  return '<li>' + row.ID + ' - ' + row.todo +
+         ' [ <a onclick="webdb.deleteTodo(' + row.ID + ');">X</a> ]</li>';
 };
 
 webdb.deleteTodo = function(id) {
