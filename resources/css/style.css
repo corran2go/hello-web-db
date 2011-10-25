@@ -1,18 +1,9 @@
 body {
+  color: #222;
+  font: 14px Arial;
 }
 
-/* Landscape */
-@media screen and (orientation:landscape) {
-  .loading-image {
-    margin-left: 496px;
-    margin-top: 366px;
-  }
-}
-
-/* Portrait */
-@media screen and (orientation:portrait) {
-  .loading-image {
-    margin-left: 366px;
-    margin-top: 496px;
-  }
-}
+body a {
+  color: #3D5C9D;
+  text-decoration: none;
+}​
