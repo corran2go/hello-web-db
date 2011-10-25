@@ -1,69 +1,69 @@
-var webdb = {};
-webdb.db = null;
+var webDB = {};
+webDB.db = null;
 
-webdb.open = function() {
+webDB.open = function() {
   var dbSize = 5 * 1024 * 1024; // 5MB
-  webdb.db = openDatabase('Todo', '1.0', 'todo manager', dbSize);
+  webDB.db = openDatabase('Todo', '1.0', 'todo manager', dbSize);
 };
 
-webdb.onError = function(tx, err) {
+webDB.onError = function(tx, err) {
   console.log('ERROR ' + err.code + ': ' + err.message);
 };
 
-webdb.onSuccess = function(tx, rs) {
-  webdb.getAllTodoItems(webdb.loadTodoItems);
+webDB.onSuccess = function(tx, rs) {
+  webDB.getAllTodoItems(webDB.loadTodoItems);
 };
 
-webdb.createTable = function() {
-  webdb.db.transaction(function(tx) {
+webDB.createTable = function() {
+  webDB.db.transaction(function(tx) {
     tx.executeSql('CREATE TABLE IF NOT EXISTS ' +
                   'todo(ID INTEGER PRIMARY KEY, todo TEXT, created DATETIME)', []);
   });
 };
 
-webdb.insertTodo = function(todoText) {
-  webdb.db.transaction(function(tx) {
+webDB.insertTodo = function(todoText) {
+  webDB.db.transaction(function(tx) {
     var created = new Date();
     tx.executeSql('INSERT INTO todo(todo, created) VALUES (?,?)',
-                  [todoText, created], webdb.onSuccess, webdb.onError);
+                  [todoText, created], webDB.onSuccess, webDB.onError);
   });
 };
 
-webdb.getAllTodoItems = function(renderFunc) {
-  webdb.db.transaction(function(tx) {
-    tx.executeSql('SELECT * FROM todo', [], renderFunc, webdb.onError);
+webDB.getAllTodoItems = function(renderFunc) {
+  webDB.db.transaction(function(tx) {
+    tx.executeSql('SELECT * FROM todo', [], renderFunc, webDB.onError);
   });
 };
 
-webdb.loadTodoItems = function(tx, rs) {
+webDB.loadTodoItems = function(tx, rs) {
   var rowOutput = '';
   for (var i=0; i < rs.rows.length; i++) {
-    rowOutput += webdb.renderTodo(rs.rows.item(i));
+    rowOutput += webDB.renderTodo(rs.rows.item(i));
   }
   var todoItems = document.getElementById('todoItems');
   todoItems.innerHTML = rowOutput;
 };
 
-webdb.renderTodo = function(row) {
+webDB.renderTodo = function(row) {
   return '<li>' + row.ID + ' - ' + row.todo +
-         ' [ <a onclick="webdb.deleteTodo(' + row.ID + ');">X</a> ]</li>';
+         ' [ <a onclick="webDB.deleteTodo(' + row.ID + ');">X</a> ]</li>';
 };
 
-webdb.deleteTodo = function(id) {
-  webdb.db.transaction(function(tx) {
+webDB.deleteTodo = function(id) {
+  webDB.db.transaction(function(tx) {
     tx.executeSql('DELETE FROM todo WHERE ID=?', [id],
-                  webdb.onSuccess, webdb.onError);
+                  webDB.onSuccess, webDB.onError);
   });
 };
 
-webdb.addTodo = function() {
+webDB.addTodo = function() {
   var todo = document.getElementById('todo');
-  webdb.insertTodo(todo.value);
+  webDB.insertTodo(todo.value);
   todo.value = '';
 };
 
-webdb.init = function() {
-  webdb.open();
-  webdb.createTable();
-  webdb.getAllTodoItems(webdb.loadTodoItems);
+webDB.init = function() {
+  webDB.open();
+  webDB.createTable();
+  webDB.getAllTodoItems(webDB.loadTodoItems);
 };
