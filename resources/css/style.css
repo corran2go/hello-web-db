@@ -1,0 +1,18 @@
+body {
+}
+
+/* Landscape */
+@media screen and (orientation:landscape) {
+  .loading-image {
+    margin-left: 496px;
+    margin-top: 366px;
+  }
+}
+
+/* Portrait */
+@media screen and (orientation:portrait) {
+  .loading-image {
+    margin-left: 366px;
+    margin-top: 496px;
+  }
+}
